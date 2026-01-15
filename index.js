@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
+import hex from './commands/hex.js';
+import ascii from './commands/ascii.js';
 const program = new Command();
 
 program
@@ -26,17 +28,7 @@ program
         console.log(msg);
     })
 
-program
-    .command('hex')
-    .argument('<number>')
-    .description('Coverts decimal to hex, binary and octal.')
-    .action((num) => {
-        const n = Number(num);
-
-        console.log(`Decimal: ${n}`);
-        console.log(`Hex: ${n.toString(16)}`);
-        console.log(`Binary: ${n.toString(2)}`);
-        console.log(`Octal: ${n.toString(8)}`);
-    });
+hex(program);
+ascii(program);
 
 program.parse();
