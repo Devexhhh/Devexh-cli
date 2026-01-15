@@ -10,7 +10,7 @@ program
     .version('0.1.0');
 
 program
-    .command('whoami')
+    .command('me')
     .description('Prints who you are in the terminal universe.')
     .action(() => {
         console.log('You are devex, bending Javascript to your will!');
@@ -19,10 +19,10 @@ program
 program
     .command('greet')
     .argument('<name>')
-    .option("-l, --loud", "shout it")
+    .option("-u, --upper", "Convert greeting to uppercase")
     .action((name, options) => {
-        let msg = `Hello, ${name}!, welcome to devex.cli.`;
-        if (options.loud) {
+        let msg = `Hello, ${name}!, welcome to devex's cli.`;
+        if (options.upper) {
             msg = msg.toUpperCase();
         }
         console.log(msg);
