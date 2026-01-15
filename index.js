@@ -26,4 +26,17 @@ program
         console.log(msg);
     })
 
+program
+    .command('hex')
+    .argument('<number>')
+    .description('Coverts decimal to hex, binary and octal.')
+    .action((num) => {
+        const n = Number(num);
+
+        console.log(`Decimal: ${n}`);
+        console.log(`Hex: ${n.toString(16)}`);
+        console.log(`Binary: ${n.toString(2)}`);
+        console.log(`Octal: ${n.toString(8)}`);
+    });
+
 program.parse();
