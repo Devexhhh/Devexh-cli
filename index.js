@@ -1,34 +1,47 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
-import hex from './commands/hex.js';
-import ascii from './commands/ascii.js';
+import { Command } from "commander";
+import chalk from "chalk";
+import hex from "./commands/hex.js";
+import ascii from "./commands/ascii.js";
+import about from "./commands/about.js";
+import clean from "./commands/clean.js";
+import env from "./commands/env.js";
+
+import { showBanner } from "./utils/banner.js";
+
 const program = new Command();
 
 program
-    .name('devex')
-    .description('A CLI tool for Devex to experiment with the terminal.')
-    .version('0.1.0');
+    .name("devex")
+    .description("A developer’s second brain")
+    .version("0.1.0");
 
 program
-    .command('me')
-    .description('Prints who you are in the terminal universe.')
+    .command("me")
+    .description("Prints who you are in the terminal universe")
     .action(() => {
-        console.log('You are devex, bending Javascript to your will!');
+        console.log("You are devex, bending JavaScript to your will!");
     });
 
 program
-    .command('greet')
-    .argument('<name>')
+    .command("greet")
+    .argument("[name]")
     .option("-u, --upper", "Convert greeting to uppercase")
-    .action((name, options) => {
-        let msg = `Hello, ${name}!, welcome to devex's cli.`;
-        if (options.upper) {
-            msg = msg.toUpperCase();
-        }
+    .action((name = "Developer", options) => {
+        let msg = `Hello, ${name}! Welcome to devex CLI.`;
+        if (options.upper) msg = msg.toUpperCase();
         console.log(msg);
-    })
+    });
 
 hex(program);
 ascii(program);
+about(program);
+clean(program);
+env(program);
 
-program.parse();
+if (process.argv.length === 2) {
+    showBanner();
+    console.log(chalk.hex('#DEADED').bold("A developer`s second brain\n"));
+}
+
+program.parse(process.argv);
