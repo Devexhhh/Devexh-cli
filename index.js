@@ -6,8 +6,11 @@ import ascii from "./commands/ascii.js";
 import about from "./commands/about.js";
 import clean from "./commands/clean.js";
 import env from "./commands/env.js";
-
+import react from "./commands/react.js";
+import next from "./commands/next.js";
+import js from "./commands/js.js";
 import { showBanner } from "./utils/banner.js";
+
 
 const program = new Command();
 
@@ -38,6 +41,9 @@ ascii(program);
 about(program);
 clean(program);
 env(program);
+react(program);
+next(program);
+js(program);
 
 if (process.argv.length === 2) {
     showBanner();
