@@ -1,4 +1,4 @@
-import { exec, execSync } from "child_process";
+import { execSync } from "child_process";
 import chalk from "chalk";
 import boxen from "boxen";
 
@@ -47,7 +47,7 @@ function getProcessName(pid) {
     }
 }
 
-function KillPID(pid) {
+function killPID(pid) {
     try {
         if(process.platform === "win32") {
             execSync(`taskkill /PID ${pid} /F`, {encoding: "utf-8"});
@@ -58,4 +58,60 @@ function KillPID(pid) {
     } catch {
         return false;
     }
+}
+
+
+export default function port(program) {
+    program
+        .command("port <number>")
+        .description("Kill the process running on a given port")
+        .option("-f, --force", "Skip confirmation prompt")
+        .action(async (number, options) => {
+            const portNum = parseInt(number, 10);
+            if(isNaN(portNum) || portNum < 1 || portNum > 65535) {
+                console.log(chalk.red(`✖ Invalid port number: ${number}`));
+                process.exit(1);
+            }
+            console.log(chalk.gray(`\nScanning port ${portNum}...\n`));
+            const pid = getPIDOnPort(portNum);
+            if (!pid) {
+                console.log(
+                    boxen(
+                        `${chalk.yellow("●")} Nothing is running on port ${chalk.bold(portNum)}`,
+                        {adding: { left: 2, right: 2, top: 0, bottom: 0 }, borderStyle: "round", borderColor: "gray"}
+                    )
+                );
+                return;
+            }
+            const name = getProcessName(pid);
+            console.log(
+                boxen(
+                     `${chalk.red("●")} Port ${chalk.bold.white(portNum)} is in use\n\n` +
+                    `  ${chalk.gray("Process:")} ${chalk.cyan(name)}\n` +
+                    `  ${chalk.gray("PID    :")} ${chalk.cyan(pid)}`,
+                    { padding: { left: 2, right: 4, top: 1, bottom: 1 }, borderStyle: "round", borderColor: "red" }
+                )
+            );
+            if(!options.force) {
+                const {default: readline} = await import("readline");
+                const rl = readline.createInterface({input: process.stdin, output: process.stdout});
+                const answer = await new Promise((resolve) =>
+                    rl.question(chalk.yellow(`\n  Kill process "${name}" (PID ${pid})? [y/N] `), resolve)
+                );
+                rl.close();
+ 
+                if (answer.toLowerCase() !== "y") {
+                    console.log(chalk.gray("\n  Aborted.\n"));
+                    return;
+                }
+            }
+ 
+            const success = killPID(pid);
+ 
+            if (success) {
+                console.log(chalk.green(`\n  ✔ Killed ${name} (PID ${pid}) on port ${portNum}\n`));
+            } else {
+                console.log(chalk.red(`\n  ✖ Failed to kill PID ${pid}. Try running with sudo.\n`));
+            }
+        })
 }
