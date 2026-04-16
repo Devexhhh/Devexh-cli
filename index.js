@@ -16,7 +16,7 @@ const program = new Command();
 
 program
     .name("devex")
-    .description("A developer’s second brain")
+    .description("A developer's second brain")
     .version("0.1.0");
 
 program
