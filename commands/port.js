@@ -46,3 +46,16 @@ function getProcessName(pid) {
         return "unknown";
     }
 }
+
+function KillPID(pid) {
+    try {
+        if(process.platform === "win32") {
+            execSync(`taskkill /PID ${pid} /F`, {encoding: "utf-8"});
+        } else {
+            execSync(`kill -9 ${pid}`, {encoding: "utf-8"});
+        }
+        return true;
+    } catch {
+        return false;
+    }
+}
