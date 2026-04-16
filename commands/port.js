@@ -29,3 +29,20 @@ function getPIDOnPort(port) {
         return null;
     }
 }
+
+function getProcessName(pid) {
+    try {
+        const platform = process.platform;
+        if (platform === "win32") {
+            const output = execSync(
+                `tasklist /FI "PID eq ${pid} /FO /CSV /NH`,
+                {encoding: "utf-8"}
+            );
+            return output.split(",")[0].replace(/"/g,"");
+        } else {
+            return execSync(`ps -p ${pid} -o comm=`, {encoding: "utf-8"}).trim();
+        }
+    } catch {
+        return "unknown";
+    }
+}
