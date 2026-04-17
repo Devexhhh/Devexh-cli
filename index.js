@@ -11,6 +11,7 @@ import next from "./commands/next.js";
 import js from "./commands/js.js";
 import { showBanner } from "./utils/banner.js";
 import port from "./commands/port.js";
+import hash from "./commands/hash.js";
 
 
 const program = new Command();
@@ -46,6 +47,7 @@ react(program);
 next(program);
 js(program);
 port(program);
+hash(program);
 
 if (process.argv.length === 2) {
     showBanner();
