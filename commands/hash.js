@@ -13,3 +13,13 @@ function hashFile(filepath, algo) {
     const buffer = readFileSync(filepath);
     return createHash(algo).update(buffer).digest("hex");
 }
+
+function colorAlgo(algo) {
+    const colors = {
+        md5: chalk.gray,
+        sha1: chalk.yellow,
+        sha256: chalk.cyan,
+        sha512: chalk.magenta,
+    };
+    return (colors[algo] || chalk.white)(algo.toUpperCase());
+}
