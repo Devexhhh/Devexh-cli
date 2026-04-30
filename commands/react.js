@@ -13,13 +13,12 @@ export default function react(program) {
             if (options.ts) template = "react-ts";
             if (options.js) template = "react";
             console.log(
-                chalk.cyan(`Creating React project '${name}' using ${template}...`)
+                chalk.cyan(`Creating React project '${name}' using ${template}...`),
             );
             try {
-                execSync(
-                    `npm create vite@latest ${name} -- --template ${template}`,
-                    { stdio: "inherit" }
-                );
+                execSync(`npm create vite@latest ${name} -- --template ${template}`, {
+                    stdio: "inherit",
+                });
                 console.log(chalk.green("\nProject created successfully!\n"));
                 console.log("Next steps:");
                 console.log(`  cd ${name}`);
