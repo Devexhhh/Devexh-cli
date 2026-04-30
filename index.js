@@ -13,7 +13,6 @@ import { showBanner } from "./utils/banner.js";
 import port from "./commands/port.js";
 import hash from "./commands/hash.js";
 
-
 const program = new Command();
 
 program
