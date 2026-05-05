@@ -12,6 +12,7 @@ import js from "./commands/js.js";
 import { showBanner } from "./utils/banner.js";
 import port from "./commands/port.js";
 import hash from "./commands/hash.js";
+import stamp from "./commands/stamp.js";
 
 const program = new Command();
 
@@ -47,6 +48,7 @@ next(program);
 js(program);
 port(program);
 hash(program);
+stamp(program);
 
 if (process.argv.length === 2) {
     showBanner();
