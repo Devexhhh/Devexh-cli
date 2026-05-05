@@ -14,3 +14,14 @@ function formatRelative(unix) {
     if (delta < 86400) return `${Math.floor(delta / 3600)}h ago`;
     return `${Math.floor(delta / 86400)}d ago`;
 }
+
+function parseInput(input) {
+    if (/^\d+$/.test(input)) {
+        const n = Number(input);
+        return n > 1e12 ? Math.floor(n / 1000) : n;
+    }
+
+    const d = new Data(input);
+    if (!isNaN(d.getTime())) return Math.floor(d.getTime() / 1000);
+    return null;
+}
