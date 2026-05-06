@@ -49,3 +49,35 @@ function renderNote(note, idx) {
     const footer = chalk.gray(`  ${formatDate(note.createdAt)}`) + tags;
     return `${header}\n${footer}`;
 }
+
+export default function note(program) {
+    const cmd = program
+        .command("note [text]")
+        .description("Persistent scratchpad — add, list, search, delete notes")
+        .option("-l, --list", "List all notes")
+        .option("-d, --delete <id>", "Delete note by ID number")
+        .option("-c, --clear", "Delete ALL notes (with confirmation)")
+        .option("-s, --search <term>", "Search notes by text or tag")
+        .option("-t, --tag <tags>", "Comma-separated tags when adding a note")
+        .action(async (text, options) => {
+
+            if (options.list || (!text && !options.delete && !options.clear && !options.search)) {
+                const notes = loadNotes();
+
+                if (notes.length === 0) {
+                    console.log(chalk.gray("\n  No notes yet. Add one:\n"));
+                    console.log(chalk.gray('    devex note "your note here"\n'));
+                    return;
+                }
+
+                const lines = notes.map((n, i) => renderNote(n, i)).join("\n\n");
+                console.log(
+                    boxen(
+                        `${chalk.bold.white("📝 Notes")}  ${chalk.gray(`(${notes.length})`)}\n\n${lines}`,
+                        { padding: { top: 1, bottom: 1, left: 2, right: 4 }, borderStyle: "round", borderColor: "green" }
+                    )
+                );
+                return;
+            }
+        });
+}
