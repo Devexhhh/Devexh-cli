@@ -20,3 +20,8 @@ function loadNotes() {
         return [];
     }
 }
+
+function saveNotes(notes) {
+    ensureDir();
+    writeFileSync(NOTES_FILE, JSON.stringify(notes, null, 2), "utf8");
+}
