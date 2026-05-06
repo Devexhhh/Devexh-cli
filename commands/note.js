@@ -33,3 +33,19 @@ function formatDate(iso) {
         hour: "2-digit", minute: "2-digit",
     });
 }
+
+function tagColor(tag) {
+    const colors = [chalk.cyan, chalk.yellow, chalk.magenta, chalk.green, chalk.blue];
+    let hash = 0;
+    for (const c of tag) hash = (hash * 31 + c.charCodeAt(0)) & 0xff;
+    return colors[hash % colors.length](tag);
+}
+
+function renderNote(note, idx) {
+    const tags = note.tags?.length
+        ? "  " + note.tags.map((t) => tagColor(`#${t}`)).join(" ")
+        : "";
+    const header = `${chalk.gray(`#${String(idx + 1).padStart(2, "0")}`)}  ${chalk.white(note.text)}`;
+    const footer = chalk.gray(`  ${formatDate(note.createdAt)}`) + tags;
+    return `${header}\n${footer}`;
+}
